@@ -1,0 +1,13 @@
+body{
+    text-align: center;
+    background-color: #facc16;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+#board {
+    /* background-color: lightgrey; */
+    background-image: url(bg.jpg);
+    background-size: 700px 250px;
+    border-bottom: 1px solid #000;
+    margin: auto;
+}
