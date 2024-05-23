@@ -67,7 +67,7 @@ window.onload = function () {
   candle3Img.src = 'candle03.png';
 
   requestAnimationFrame(update);
-  setInterval(placeCandles, 1000); //1000 milliseconds = 1 sec
+  setInterval(placeCandles, 500); //1000 milliseconds = 1 sec
   document.addEventListener('keydown', moveMk);
 };
 
@@ -127,7 +127,10 @@ function moveMk(e) {
     return;
   }
 
-  if ((e.code == 'Space' || e.code == 'ArrowUp') && mk.y == mkY) {
+  if (
+    (e.code == 'Space' || e.keyCode == 32 || e.code == 'ArrowUp') &&
+    mk.y == mkY
+  ) {
     //jump
     velocityY = -10;
   }
@@ -163,9 +166,9 @@ function placeCandles() {
     candlesArray.push(candle);
   }
 
-  //   if (candlesArray.length > 5) {
-  //     candlesArray.shift(); //Remove the first element from the array so that the array doesn't constanly grow
-  //   }
+  if (candlesArray.length > 5) {
+    candlesArray.shift(); //Remove the first element from the array so that the array doesn't constanly grow
+  }
 }
 
 function detectCollision(a, b) {
