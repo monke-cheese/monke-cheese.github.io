@@ -73,7 +73,7 @@ function startGame() {
   animationFrameId = requestAnimationFrame(update);
   candleInterval = setInterval(placeCandles, 500); // 1000 milliseconds = 1 sec
   document.addEventListener('keydown', moveMk);
-  document.addEventListener('touchstart', moveMk);
+  document.addEventListener('touchstart', handleTouchStart);
 }
 
 function update() {
@@ -122,11 +122,9 @@ function update() {
   context.fillStyle = 'red';
   context.font = '30px courier bold';
   let gameOverText = 'It is over! Jeets Won!';
-  let gameOverText2 = 'Press Enter to restart';
 
   if (gameOver == true) {
     context.fillText(gameOverText, 250, 70);
-    context.fillText(gameOverText2, 250, 100);
   }
 }
 
@@ -139,17 +137,27 @@ function moveMk(e) {
   }
 
   if (
-    (e.code == 'Space' ||
-      e.keyCode == 32 ||
-      e.code == 'ArrowUp' ||
-      e.code == 'touchstart' ||
-      e.code == 'touchmove' ||
-      e.code == 'touchend') &&
+    (e.code == 'Space' || e.keyCode == 32 || e.code == 'ArrowUp') &&
     mk.y == mkY
   ) {
     // jump
     velocityY = -10;
   }
+}
+
+function handleTouchStart(e) {
+  if (gameOver) {
+    restartGame();
+    return;
+  }
+
+  // jump
+  if (mk.y == mkY) {
+    velocityY = -10;
+  }
+
+  // Prevent the default mouse event from being fired
+  e.preventDefault();
 }
 
 function placeCandles() {
