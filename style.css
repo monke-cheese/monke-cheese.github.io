@@ -17,11 +17,18 @@ body{
             height: 100px;
         }
     }
+
+    button {
+        display: none;
+        width: 300px;
+        height: 50px;
+        background-color: lightgreen;
+    }
 }
 
 #board {
     /* background-color: lightgrey; */
-    background-image: url(bg.jpg);
+    background-image: url(bg01.jpg);
     background-size: 100% 100%;
     border-bottom: 1px solid #000;
     margin: auto;
@@ -31,12 +38,20 @@ body{
    
 }
 @media only screen and (max-width: 481px){
-    h1{
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-        justify-content: center;
+    body{
+
+        h1{
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            justify-content: center;
+        }
+        button{
+            display: block;
+            margin: 0 auto;
+        }
     }
+    
 }
 @media only screen and (max-width: 769px){}
 @media only screen and (max-width: 1026px){}

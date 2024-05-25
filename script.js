@@ -113,8 +113,8 @@ function update() {
   }
 
   // score
-  context.fillStyle = 'black';
-  context.font = '20px courier';
+  context.fillStyle = 'yellow';
+  context.font = '20px courier bold';
   score++;
   context.fillText(score, 5, 20);
 
@@ -122,9 +122,11 @@ function update() {
   context.fillStyle = 'red';
   context.font = '30px courier bold';
   let gameOverText = 'It is over! Jeets Won!';
+  let gameOverText02 = 'Press Enter ';
 
   if (gameOver == true) {
     context.fillText(gameOverText, 250, 70);
+    context.fillText(gameOverText02, 300, 100);
   }
 }
 
