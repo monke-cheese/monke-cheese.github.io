@@ -1,13 +1,42 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+}
+
 body{
     text-align: center;
     background-color: #facc16;
     font-family: 'Courier New', Courier, monospace;
+
+    h1{
+        
+        img{
+            width: 100px;
+            height: 100px;
+        }
+    }
 }
 
 #board {
     /* background-color: lightgrey; */
     background-image: url(bg.jpg);
-    background-size: 700px 250px;
+    background-size: 100% 100%;
     border-bottom: 1px solid #000;
     margin: auto;
+    max-width: 100%;
+    max-height: 100%;
+
+   
 }
+@media only screen and (max-width: 481px){
+    h1{
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+    }
+}
+@media only screen and (max-width: 769px){}
+@media only screen and (max-width: 1026px){}

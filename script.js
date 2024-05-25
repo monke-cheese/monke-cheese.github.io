@@ -22,7 +22,7 @@ let mk = {
 let candlesArray = [];
 
 let candle1Width = 28;
-let candle2Width = 100;
+let candle2Width = 80;
 let candle3Width = 68;
 
 let candleHeight = 100;
@@ -33,13 +33,16 @@ let candle1Img;
 let candle2Img;
 let candle3Img;
 
-//physics
-let velocityX = -6;
+// physics
+const initialVelocityX = -6;
+let velocityX = initialVelocityX;
 let velocityY = 0;
 let gravity = 0.3;
 
 let gameOver = false;
 let score = 0;
+let candleInterval;
+let animationFrameId; // To keep track of the animation frame
 
 window.onload = function () {
   board = document.getElementById('board');
@@ -47,9 +50,6 @@ window.onload = function () {
   board.width = boardWidth;
 
   context = board.getContext('2d');
-
-  //   context.fillStyle = 'green';
-  //   context.fillRect(mk.x, mk.y, mk.width, mk.height);
 
   mkImg = new Image();
   mkImg.src = 'mk.png';
@@ -66,25 +66,31 @@ window.onload = function () {
   candle3Img = new Image();
   candle3Img.src = 'candle03.png';
 
-  requestAnimationFrame(update);
-  setInterval(placeCandles, 500); //1000 milliseconds = 1 sec
-  document.addEventListener('keydown', moveMk);
+  startGame();
 };
 
+function startGame() {
+  animationFrameId = requestAnimationFrame(update);
+  candleInterval = setInterval(placeCandles, 500); // 1000 milliseconds = 1 sec
+  document.addEventListener('keydown', moveMk);
+  document.addEventListener('touchstart', moveMk);
+}
+
 function update() {
-  requestAnimationFrame(update);
+  animationFrameId = requestAnimationFrame(update);
   if (gameOver) {
+    cancelAnimationFrame(animationFrameId); // Cancel the animation frame when the game is over
     return;
   }
 
   context.clearRect(0, 0, board.width, board.height);
 
-  //mk
+  // mk
   velocityY += gravity;
-  mk.y = Math.min(mk.y + velocityY, mkY); //apply gravity to current mk.y, making sure it doesn't exceed the ground
+  mk.y = Math.min(mk.y + velocityY, mkY); // apply gravity to current mk.y, making sure it doesn't exceed the ground
   context.drawImage(mkImg, mk.x, mk.y, mk.width, mk.height);
 
-  //candles
+  // candles
   for (let i = 0; i < candlesArray.length; i++) {
     let candle = candlesArray[i];
     candle.x += velocityX;
@@ -106,32 +112,42 @@ function update() {
     }
   }
 
-  //score
+  // score
   context.fillStyle = 'black';
   context.font = '20px courier';
   score++;
   context.fillText(score, 5, 20);
 
-  //gameover
+  // gameover
   context.fillStyle = 'red';
   context.font = '30px courier bold';
-  gameOverText = 'It is over! Jeets Won!';
+  let gameOverText = 'It is over! Jeets Won!';
+  let gameOverText2 = 'Press Enter to restart';
 
   if (gameOver == true) {
     context.fillText(gameOverText, 250, 70);
+    context.fillText(gameOverText2, 250, 100);
   }
 }
 
 function moveMk(e) {
   if (gameOver) {
+    if (e.key === 'Enter') {
+      restartGame();
+    }
     return;
   }
 
   if (
-    (e.code == 'Space' || e.keyCode == 32 || e.code == 'ArrowUp') &&
+    (e.code == 'Space' ||
+      e.keyCode == 32 ||
+      e.code == 'ArrowUp' ||
+      e.code == 'touchstart' ||
+      e.code == 'touchmove' ||
+      e.code == 'touchend') &&
     mk.y == mkY
   ) {
-    //jump
+    // jump
     velocityY = -10;
   }
 }
@@ -167,15 +183,33 @@ function placeCandles() {
   }
 
   if (candlesArray.length > 5) {
-    candlesArray.shift(); //Remove the first element from the array so that the array doesn't constanly grow
+    candlesArray.shift(); // Remove the first element from the array so that the array doesn't constantly grow
   }
 }
 
 function detectCollision(a, b) {
   return (
-    a.x < b.x + b.width && //a's top left corner doesn't reach b's top right corner
-    a.x + a.width > b.x && // a's top right coner passes b's top left corner
+    a.x < b.x + b.width && // a's top left corner doesn't reach b's top right corner
+    a.x + a.width > b.x && // a's top right corner passes b's top left corner
     a.y < b.y + b.height && // a's top left corner doesn't reach b's bottom left corner
     a.y + a.height > b.y // a's bottom left corner passes b's top left corner
   );
+}
+
+function restartGame() {
+  gameOver = false;
+  score = 0;
+  velocityX = initialVelocityX; // Reset velocity to initial value
+  velocityY = 0;
+  mk.y = mkY;
+  candlesArray = [];
+  mkImg.src = 'mk.png'; // Resetting the character image
+
+  // Clear the previous interval and start a new one
+  clearInterval(candleInterval);
+  candleInterval = setInterval(placeCandles, 500);
+
+  // Cancel the previous animation frame and start a new one
+  cancelAnimationFrame(animationFrameId);
+  animationFrameId = requestAnimationFrame(update);
 }
