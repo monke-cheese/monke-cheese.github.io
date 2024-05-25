@@ -71,7 +71,7 @@ window.onload = function () {
 
 function startGame() {
   animationFrameId = requestAnimationFrame(update);
-  candleInterval = setInterval(placeCandles, 500); // 1000 milliseconds = 1 sec
+  candleInterval = setInterval(placeCandles, 700); // 1000 milliseconds = 1 sec
   document.addEventListener('keydown', moveMk);
   document.addEventListener('touchstart', handleTouchStart);
 }
@@ -215,7 +215,7 @@ function restartGame() {
 
   // Clear the previous interval and start a new one
   clearInterval(candleInterval);
-  candleInterval = setInterval(placeCandles, 500);
+  candleInterval = setInterval(placeCandles, 700);
 
   // Cancel the previous animation frame and start a new one
   cancelAnimationFrame(animationFrameId);
